@@ -9,3 +9,6 @@
    -> (1) npx sequelize init for initiation project
    -> (2) settings config.js
    -> (3) create migration file : npx sequelize migration:create --name create-user-table
+   -> (4) install mysql : npm install mysql2 --save
+   -> (5) make model object
+   -> (6) install fastest validator : npm i fastest-validator, https://www.npmjs.com/package/fastest-validator
