@@ -12,3 +12,4 @@
    -> (4) install mysql : npm install mysql2 --save
    -> (5) make model object
    -> (6) install fastest validator : npm i fastest-validator, https://www.npmjs.com/package/fastest-validator
+   -> (7) if make model then use router in app.js then : npx sequelize db:migrate
