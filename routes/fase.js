@@ -3,9 +3,11 @@ var router = express.Router();
 const Validator = require("fastest-validator");
 
 const { Fase } = require("../models");
+const { Semester } = require("../models");
 
 const v = new Validator();
 
+// ------------------- Fase -------------------
 // get all data fase
 router.get("/", async (req, res) => {
   const fase = await Fase.findAll();
@@ -41,6 +43,39 @@ router.delete("/:id", async (req, res) => {
   res.json({
     msg: "fase berhasil dihapus",
   });
+});
+
+// ------------------- Semester -------------------
+// get all data semester
+router.get("/:faseId/semester", async (req, res) => {
+  const faseId = req.params.faseId;
+  const semester = await Semester.findAll({
+    where: { idFase: faseId },
+  });
+  res.send(semester);
+});
+
+// create data semester
+router.post("/:faseId/semester", async (req, res) => {
+  const faseId = req.params.faseId;
+  const semesterName = req.body;
+
+  const schema = {
+    namaSemester: "string",
+  };
+
+  const validate = v.validate(semesterName, schema);
+  // cek validasi
+  if (validate.length) {
+    return res.status(400).json(validate);
+  }
+
+  const semester = await Semester.create({
+    namaSemester: req.body.namaSemester,
+    idFase: faseId,
+  });
+  res.status(201).json(semester);
+  // res.status(201).json(parseInt(faseId));
 });
 
 module.exports = router;
