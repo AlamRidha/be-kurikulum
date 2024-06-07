@@ -86,7 +86,7 @@ router.delete("/:id", async (req, res) => {
 
   // cek user di db
   if (!user) {
-    return res.status(400).json({ msg: "User tidak ditemukan" });
+    return res.status(404).json({ msg: "User tidak ditemukan" });
   }
 
   await user.destroy();
