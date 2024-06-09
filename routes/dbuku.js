@@ -66,6 +66,7 @@ router.put("/:id", async (req, res) => {
   }
 
   buku = await buku.update(req.body);
+
   res.json(buku);
 });
 
