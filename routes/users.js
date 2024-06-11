@@ -96,4 +96,22 @@ router.delete("/:id", async (req, res) => {
   });
 });
 
+// user login
+router.post("/login", async (req, res) => {
+  const { nip, password } = req.body;
+
+  const user = await Users.findOne({
+    where: {
+      nip,
+      password,
+    },
+  });
+
+  if (!user) {
+    return res.status(400).json({ msg: "User tidak ditemukan" });
+  }
+
+  res.json(user);
+});
+
 module.exports = router;
