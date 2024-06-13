@@ -3,30 +3,30 @@
 module.exports = {
   async up(queryInterface, Sequelize) {
     await queryInterface.createTable(
-      "mata_pelajaran",
+      "capaian_pembelajaran",
       {
-        idMp: {
+        idCp: {
           type: Sequelize.INTEGER,
           autoIncrement: true,
           primaryKey: true,
           allowNull: false,
         },
-        namaMataPelajaran: {
+        elemen: {
           type: Sequelize.TEXT,
           allowNull: false,
         },
-        tahunAjaran: {
+        capaian_pembelajaran: {
           type: Sequelize.TEXT,
           allowNull: false,
         },
-        idSemester: {
+        idMp: {
           type: Sequelize.INTEGER,
           allowNull: false,
           references: {
             model: {
-              tableName: "semester",
+              tableName: "mata_pelajaran",
             },
-            key: "idSemester",
+            key: "idMp",
           },
         },
       },
@@ -37,6 +37,6 @@ module.exports = {
   },
 
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable("mata_pelajaran");
+    await queryInterface.dropTable("capaian_pembelajaran");
   },
 };

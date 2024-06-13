@@ -10,6 +10,7 @@ var indexRouter = require("./routes/index");
 var usersRouter = require("./routes/users");
 var dbukuRouter = require("./routes/dbuku");
 var faseRouter = require("./routes/fase");
+var kurikulumRouter = require("./routes/kurikulum");
 
 var app = express();
 
@@ -34,5 +35,6 @@ app.use("/", indexRouter);
 app.use("/users", usersRouter);
 app.use("/dbuku", dbukuRouter);
 app.use("/fase", faseRouter);
+app.use("/kurikulum", kurikulumRouter);
 
 module.exports = app;
