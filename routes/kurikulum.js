@@ -4,6 +4,7 @@ const Validator = require("fastest-validator");
 
 const { CapaianPembelajaran } = require("../models");
 const { TujuanPembelajaran } = require("../models");
+const { AlurTujuanPembelajaran } = require("../models");
 
 const v = new Validator();
 
@@ -179,6 +180,96 @@ router.put("/tujuan_pembelajaran/:idTp", async (req, res) => {
 
   dataTujuan = await dataTujuan.update(req.body);
   res.json(dataTujuan);
+});
+
+// ------------------- Alur Tujuan Pembelajaran -------------------
+// get all data alur tujuan pembelajaran
+router.get("/:idMp/alur_tujuan_pembelajaran", async (req, res) => {
+  const idMp = req.params.idMp;
+  const alur_tujuan_pembelajaran = await AlurTujuanPembelajaran.findAll({
+    where: { idMp: idMp },
+  });
+  res.send(alur_tujuan_pembelajaran);
+});
+
+// get data alur tujuan pembelajaran by id
+router.get("/alur_tujuan_pembelajaran/:idAtp", async (req, res) => {
+  const idAtp = req.params.idAtp;
+  const alur_tujuan_pembelajaran = await AlurTujuanPembelajaran.findByPk(idAtp);
+
+  if (!alur_tujuan_pembelajaran) {
+    return res
+      .status(404)
+      .json({ msg: "Alur Tujuan Pembelajaran tidak ditemukan" });
+  }
+
+  res.json(alur_tujuan_pembelajaran);
+});
+
+// create data alur tujuan pembelajaran
+router.post("/:idMp/alur_tujuan_pembelajaran", async (req, res) => {
+  const idMp = req.params.idMp;
+  const schema = {
+    tahap: "string",
+    alur_tujuan_pembelajaran: "string",
+  };
+
+  const validate = v.validate(req.body, schema);
+  // cek validasi
+  if (validate.length) {
+    return res.status(400).json(validate);
+  }
+
+  const alur_tujuan_pembelajaran = await AlurTujuanPembelajaran.create({
+    tahap: req.body.tahap,
+    alur_tujuan_pembelajaran: req.body.alur_tujuan_pembelajaran,
+    idMp: idMp,
+  });
+
+  res.status(201).json(alur_tujuan_pembelajaran);
+});
+
+// delete alur tujuan pembelajaran
+router.delete("/alur_tujuan_pembelajaran/:idAtp", async (req, res) => {
+  const idAtp = req.params.idAtp;
+  const alur_tujuan_pembelajaran = await AlurTujuanPembelajaran.findByPk(idAtp);
+
+  if (!alur_tujuan_pembelajaran) {
+    return res
+      .status(404)
+      .json({ msg: "Alur Tujuan Pembelajaran tidak ditemukan" });
+  }
+
+  await alur_tujuan_pembelajaran.destroy();
+  res.json({
+    msg: "Alur Tujuan Pembelajaran berhasil dihapus",
+  });
+});
+
+// update alur tujuan pembelajaran
+router.put("/alur_tujuan_pembelajaran/:idAtp", async (req, res) => {
+  const idAtp = req.params.idAtp;
+  let dataAlur = await AlurTujuanPembelajaran.findByPk(idAtp);
+
+  if (!dataAlur) {
+    return res
+      .status(400)
+      .json({ msg: "Alur Tujuan Pembelajaran tidak ditemukan" });
+  }
+
+  const schema = {
+    tahap: "string|optional",
+    alur_tujuan_pembelajaran: "string|optional",
+  };
+
+  const validate = v.validate(req.body, schema);
+  // cek validasi
+  if (validate.length) {
+    return res.status(400).json(validate);
+  }
+
+  dataAlur = await dataAlur.update(req.body);
+  res.json(dataAlur);
 });
 
 module.exports = router;
