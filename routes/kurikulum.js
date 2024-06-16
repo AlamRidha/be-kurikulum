@@ -5,6 +5,7 @@ const Validator = require("fastest-validator");
 const { CapaianPembelajaran } = require("../models");
 const { TujuanPembelajaran } = require("../models");
 const { AlurTujuanPembelajaran } = require("../models");
+const { ModulPembelajaran } = require("../models");
 
 const v = new Validator();
 
@@ -270,6 +271,120 @@ router.put("/alur_tujuan_pembelajaran/:idAtp", async (req, res) => {
 
   dataAlur = await dataAlur.update(req.body);
   res.json(dataAlur);
+});
+
+// ------------------- Modul Pembelajaran -------------------
+// get all data modul pembelajaran
+router.get("/:idMp/modul_pembelajaran", async (req, res) => {
+  const idMp = req.params.idMp;
+  const modul_pembelajaran = await ModulPembelajaran.findAll({
+    where: { idMp: idMp },
+  });
+  res.send(modul_pembelajaran);
+});
+
+// get data modul pembelajaran by id
+router.get("/modul_pembelajaran/:idModul", async (req, res) => {
+  const idModul = req.params.idModul;
+  const modul_pembelajaran = await ModulPembelajaran.findByPk(idModul);
+
+  if (!modul_pembelajaran) {
+    return res.status(404).json({ msg: "Modul Pembelajaran tidak ditemukan" });
+  }
+
+  res.json(modul_pembelajaran);
+});
+
+// create data modul pembelajaran
+router.post("/:idMp/modul_pembelajaran", async (req, res) => {
+  const idMp = req.params.idMp;
+  const schema = {
+    tahun_penyusunan: "string",
+    bab: "string",
+    tema: "string",
+    alokasi_waktu: "string",
+    kompetensi_awal: "string",
+    profil_pancasila: "string",
+    sarana_prasarana: "string",
+    model_pembelajaran: "string",
+    tujuan_bab: "string",
+    deskripsi_cp: "string",
+    pemahaman: "string",
+    kegiatan_pembelajaran: "string",
+  };
+
+  const validate = v.validate(req.body, schema);
+  // cek validasi
+  if (validate.length) {
+    return res.status(400).json(validate);
+  }
+
+  const modul_pembelajaran = await ModulPembelajaran.create({
+    tahun_penyusunan: req.body.tahun_penyusunan,
+    bab: req.body.bab,
+    tema: req.body.tema,
+    alokasi_waktu: req.body.alokasi_waktu,
+    kompetensi_awal: req.body.kompetensi_awal,
+    profil_pancasila: req.body.profil_pancasila,
+    sarana_prasarana: req.body.sarana_prasarana,
+    model_pembelajaran: req.body.model_pembelajaran,
+    tujuan_bab: req.body.tujuan_bab,
+    deskripsi_cp: req.body.deskripsi_cp,
+    pemahaman: req.body.pemahaman,
+    kegiatan_pembelajaran: req.body.kegiatan_pembelajaran,
+    idMp: idMp,
+  });
+
+  res.status(201).json(modul_pembelajaran);
+});
+
+// delete modul pembelajaran
+router.delete("/modul_pembelajaran/:idModul", async (req, res) => {
+  const idModul = req.params.idModul;
+  const modul_pembelajaran = await ModulPembelajaran.findByPk(idModul);
+
+  if (!modul_pembelajaran) {
+    return res.status(404).json({ msg: "Modul Pembelajaran tidak ditemukan" });
+  }
+
+  await modul_pembelajaran.destroy();
+  res.json({
+    msg: "Modul Pembelajaran berhasil dihapus",
+  });
+});
+
+// update modul pembelajaran
+router.put("/modul_pembelajaran/:idModul", async (req, res) => {
+  const idModul = req.params.idModul;
+  let dataModul = await ModulPembelajaran.findByPk(idModul);
+
+  if (!dataModul) {
+    return res.status(400).json({ msg: "Modul Pembelajaran tidak ditemukan" });
+  }
+
+  const schema = {
+    tahun_penyusunan: "string|optional",
+    bab: "string|optional",
+    tema: "string|optional",
+    alokasi_waktu: "string|optional",
+    kompetensi_awal: "string|optional",
+    profil_pancasila: "string|optional",
+    sarana_prasarana: "string|optional",
+    model_pembelajaran: "string|optional",
+    tujuan_bab: "string|optional",
+    deskripsi_cp: "string|optional",
+    pemahaman: "string|optional",
+    kegiatan_pembelajaran: "string|optional",
+  };
+
+  const validate = v.validate(req.body, schema);
+  // cek validasi
+  if (validate.length) {
+    return res.status(400).json(validate);
+  }
+
+  dataModul = await dataModul.update(req.body);
+  res.json(dataModul);
 });
 
 module.exports = router;
