@@ -90,6 +90,18 @@ router.get("/semester/:semesterId/mp", async (req, res) => {
   res.send(mataPelajaran);
 });
 
+// get mata pelajaran by id
+router.get("/mp/:id", async (req, res) => {
+  const id = req.params.id;
+  const mataPelajaran = await MataPelajaran.findByPk(id);
+
+  if (!mataPelajaran) {
+    return res.status(404).json({ msg: "Mata pelajaran tidak ditemukan" });
+  }
+
+  res.json(mataPelajaran);
+});
+
 // create data mata pelajaran
 router.post("/semester/:semesterId/mp", async (req, res) => {
   const semesterId = req.params.semesterId;
