@@ -52,7 +52,7 @@ router.post("/", async (req, res, next) => {
   // res.send("ok");
   const evaluasi = await Evaluasi.create(req.body);
 
-  res.json(evaluasi);
+  res.status(201).json(evaluasi);
 });
 
 // update data
